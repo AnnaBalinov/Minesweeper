@@ -3,15 +3,29 @@ body {
 }
 
 table {
-  height: 250px;
-  width: 250px;
+  height: 384px;
+  width: 384px;
   margin: auto;
 }
 
 table tr td {
   border: 1px solid rgb(59, 59, 59);
   text-align: center;
-  height: 50px;
-  width: 50px;
+
+  height: 25px;
+  width: 25px;
 }
 
+.cover {
+  /* height: 100%; */
+  width: 100%;
+}
+
+.timer {
+  padding: 10px;
+}
+
+.levels {
+  height: 50px;
+  margin-top: 20px;
+}
