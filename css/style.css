@@ -1,0 +1,17 @@
+body {
+  text-align: center;
+}
+
+table {
+  height: 250px;
+  width: 250px;
+  margin: auto;
+}
+
+table tr td {
+  border: 1px solid rgb(59, 59, 59);
+  text-align: center;
+  height: 50px;
+  width: 50px;
+}
+
