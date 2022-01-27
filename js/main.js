@@ -20,20 +20,20 @@ var gVictoryScore = 0
 var gBoard = []
 var gMinesLocation = []
 var gTime = 0
-var gTimeInterval;
-var firstClick = 0
+var gTimeInterval = 0
+var gFirstClick = 0
 
 function initGame(size = 4, mines = 2) {
-
     gLevel.SIZE = size
     gLevel.MINES = mines
     gVictoryScore = (size * size) - mines
-    console.log(gVictoryScore)
-
+    // console.log(gVictoryScore)
     gBoard = buildBoard(size, mines)
     renderBoard(gBoard)
-    console.table(gBoard)
+    // console.table(gBoard)
 }
+
+
 
 function buildBoard(size, mines) {
     var board = []
@@ -54,7 +54,7 @@ function buildBoard(size, mines) {
         var location = randomCellLocation(board)
         board[location.i][location.j].isMine = true
         gMinesLocation.push(location)
-        console.log(location)
+        // console.log('mines location', location)
     }
     return board
 }
@@ -98,15 +98,10 @@ function cellClicked(elCell, i, j) {
 
     var elCell = document.querySelector(`.cell-${i}-${j}`)
 
-    firstClick++
-    if (firstClick === 1) {
+    gFirstClick++
+    if (gFirstClick === 1) {
         gGame.isOn = true
         setTimer()
-        // if (gBoard[i][j].isMine) {
-        //     gBoard[i][j].isMine = false
-        //     elCell.innerText = FLOOR
-        //     console.log('Mine')
-        // }
     }
 
     if (gBoard[i][j].isMarked || gBoard[i][j].isShown || !gGame.isOn) return
@@ -122,7 +117,6 @@ function cellClicked(elCell, i, j) {
         renderScore(gExposedCellsCount)
 
     } else if (gBoard[i][j].isMine) {
-
         elCell.innerText = MINE
         console.log('game over')        //LOSE: when clicking a mine
         gameOver()
@@ -159,7 +153,7 @@ function expandShown(board, rowIdx, colIdx) {
 
                 board[i][j].isShown = true
                 board[i][j].minesAroundCount = setMinesNebsCount(gBoard, i, j)
-                
+
                 if (currCell.minesAroundCount !== 0) {
                     elNebCell.innerText = currCell.minesAroundCount
                     gExposedCellsCount++
@@ -168,11 +162,6 @@ function expandShown(board, rowIdx, colIdx) {
                     elNebCell.innerText = FLOOR
                     gExposedCellsCount++
                     renderScore(gExposedCellsCount)
-                }
-                if (gExposedCellsCount >= gVictoryScore) {
-                    console.log('Victory')
-                    gameOver()
-                    victory()
                 }
             }
         }
@@ -204,6 +193,7 @@ function cellMarked(elCell, i, j) {
 function gameOver() {
     gGame.isOn = false
     stopTimer()
+    renderScore(0)
     ///all mines should be revealed
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
@@ -217,12 +207,13 @@ function gameOver() {
 
 function victory() {
     var elMsg = document.querySelector('.msg')
-    elMsg.innerHTML = 'victory!'
+    elMsg.innerHTML = 'victory! 😎'
 }
 
 function loos() {
     var elMsg = document.querySelector('.msg')
-    elMsg.innerHTML = 'Loos...'
+    elMsg.innerHTML = 'Loos... 🤯'
+    
 }
 
 

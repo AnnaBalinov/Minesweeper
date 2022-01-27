@@ -10,25 +10,26 @@
 
 <body onload="initGame()">
 
-    <h1 class="msg">Minesweeper</h1>
-    <h3>
-        timer:<span class="timer">0</span>
-        score: <span class="score">0</span>
-    </h3>
+        <h1 class="msg">Minesweeper 😊</h1>
+        <h3>
+            timer:<span class="timer">0</span>
+            score: <span class="score">0</span>
+        </h3>
 
-    <div class="play-zone">
-        <table>
-            <tbody class="board">
-            </tbody>
-        </table>
-    </div>
+        <div class="play-zone">
+            <table>
+                <tbody class="board">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="levels">
+            <button onclick="initGame(4, 2)">Beginners</button>
+            <button onclick="initGame(8, 12)">advanced</button>
+            <button onclick="initGame(12, 30)">Experts</button>
+        </div>
 
 
-    <div class="levels">
-        <button onclick="initGame(4, 2)">Beginners</button>
-        <button onclick="initGame(8, 12)">advanced</button>
-        <button onclick="initGame(12, 30)">Experts</button>
-    </div>
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
 </body>
