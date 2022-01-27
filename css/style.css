@@ -2,6 +2,10 @@ body {
   text-align: center;
 }
 
+.play-zone {
+  height: 400px;
+  margin: auto;
+}
 table {
   margin: auto;
 }
@@ -16,6 +20,9 @@ table tr td {
   width: 25px;
 }
 
+.flag {
+  width: 100%;
+}
 .cover {
   width: 100%;
 }
@@ -32,7 +39,6 @@ table tr td {
 
 .levels {
   height: 50px;
-  margin-top: 20px;
 }
 
 /* .cell-marked {
