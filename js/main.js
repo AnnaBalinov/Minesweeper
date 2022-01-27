@@ -21,13 +21,14 @@ var gBoard = []
 var gMinesLocation = []
 var gTime = 0
 var gTimeInterval;
-
+var firstClick = 0
 
 function initGame(size = 4, mines = 2) {
+
+    // gGame.isOn = true
+
     gLevel.SIZE = size
     gLevel.MINES = mines
-    gGame.isOn = true
-
     gVictoryScore = (size * size) - mines
     console.log(gVictoryScore)
 
@@ -35,6 +36,7 @@ function initGame(size = 4, mines = 2) {
     renderBoard(gBoard)
     console.table(gBoard)
 }
+
 
 
 function buildBoard(size, mines) {
@@ -99,9 +101,15 @@ function renderBoard(board) {
 
 function cellClicked(elCell, i, j) {
 
+    firstClick++
+    if (firstClick === 1) {
+        gGame.isOn = true
+        setTimer()
+    }
     var elCell = document.querySelector(`.cell-${i}-${j}`)
 
     if (gBoard[i][j].isMarked || !gGame.isOn) return
+
 
     // // update the model
     gBoard[i][j].isShown = true
@@ -131,7 +139,7 @@ function cellClicked(elCell, i, j) {
         victory()
     }
     console.log(gExposedCellsCount)
-    //setTimer()
+
 }
 
 function expandShown(board, rowIdx, colIdx) {
@@ -142,7 +150,7 @@ function expandShown(board, rowIdx, colIdx) {
             if (j < 0 || j > board.length - 1) continue
             if (i === rowIdx && j === colIdx) continue
             var currCell = board[i][j]
-            if (currCell.isMine) return
+            if (currCell.isMine || currCell.isMarked || currCell.isShown) return
             else {
                 var elNebCell = document.querySelector(`.cell-${i}-${j}`)
 
@@ -167,21 +175,21 @@ function expandShown(board, rowIdx, colIdx) {
 }
 
 
-
-
-
 function cellMarked(elCell, i, j) {
     window.event.preventDefault()
 
     if (gBoard[i][j].isShown || !gGame.isOn) return
 
     if (!gBoard[i][j].isMarked) {
+
         // update the model
         gBoard[i][j].isMarked = true
 
         // update the dom
         elCell.innerHTML = FLAG
+
     } else {
+        // update the dom
         gBoard[i][j].isMarked = false
         elCell.innerHTML = COVER
     }
@@ -191,6 +199,7 @@ function cellMarked(elCell, i, j) {
 function gameOver() {
     gGame.isOn = false
     stopTimer()
+
 
     ///all mines should be revealed
     for (var i = 0; i < gBoard.length; i++) {
@@ -216,7 +225,7 @@ function loos() {
 
 //timer
 function setTimer() {
-    if (gGame.isOn) return
+    if (!gGame.isOn) return
     gGame.isOn = true
     gTimeInterval = setInterval(renderTime, 10)
     gTime = Date.now()
