@@ -3,23 +3,28 @@ body {
 }
 
 table {
-  height: 384px;
-  width: 384px;
   margin: auto;
 }
-
+table tr {
+  height: 30px;
+  width: 30px;
+}
 table tr td {
   border: 1px solid rgb(59, 59, 59);
   text-align: center;
-
   height: 25px;
   width: 25px;
 }
 
 .cover {
-  /* height: 100%; */
   width: 100%;
 }
+/* 
+  height: 45px;
+  width: 45px; */
+
+/* height: 25px;
+  width: 25px; */
 
 .timer {
   padding: 10px;
@@ -29,3 +34,7 @@ table tr td {
   height: 50px;
   margin-top: 20px;
 }
+
+/* .cell-marked {
+
+} */

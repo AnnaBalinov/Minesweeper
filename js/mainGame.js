@@ -4,6 +4,8 @@ const MINE = '🌸'
 const FLOOR = ' '
 const MINE_IMG = `<img class="bomb" src="img/bomb.png">`
 const COVER = `<img class="cover" src="img/cover.png">`
+const FLAG = '🚩'
+// `<img class="flag" src="img/flag.png">`
 
 var gGame = {
     score: 0,
@@ -19,17 +21,22 @@ var gBoard = []
 var gTime = 0
 var gTimeInterval;
 
-function initGame(level, mines) {
-    gBoard = buildBoard(level, mines)
+function initGame(size = 4, mines = 2) {
+    gLevel.SIZE = size
+    gLevel.MINES = mines
+
+    gBoard = buildBoard(size, mines)
     renderBoard(gBoard)
+
     console.table(gBoard)
+
 }
 
 // Builds the board - V
 // Set mines at random locations - V
 // Call setMinesNebsCount() - V
 // Return the created board - V
-function buildBoard(size = 4, level = 2) {
+function buildBoard(size, mines) {
     var board = []
     for (var i = 0; i < size; i++) {
         board.push([])
@@ -44,8 +51,9 @@ function buildBoard(size = 4, level = 2) {
         }
     }
     //set mines
-    for (var i = 0; i < level; i++) {
+    for (var i = 0; i < mines; i++) {
         var location = randomCellLocation(board)
+        // console.log(location)
         board[location.i][location.j].isMine = true
     }
 
@@ -58,7 +66,9 @@ function randomCellLocation(board) {
     var cells = []
     for (var i = 0; i < board.length - 1; i++) {
         for (var j = 0; j < board[0].length - 1; j++) {
+            if (board[i][j].isMine) break
             cells.push({ i: i, j: j })
+
         }
     }
     var cellLocation = cells[getRandomIntInclusive(0, cells.length - 1)]
@@ -85,17 +95,15 @@ function setMinesNebsCount(board, rowIdx, colIdx) {
 
 //Render the board as a <table> to the page
 function renderBoard(board) {
+
     var strHTML = ''
     for (var i = 0; i < board.length; i++) {
         strHTML += '<tr>\n'
         for (var j = 0; j < board[0].length; j++) {
             var currCell = COVER
-            // if (board[i][j].isMine) {
-            //     currCell = MINE
-            // }
             var cellClass = `cell-${i}-${j}`
             var cellId = `i:${i}, j:${j}`
-            strHTML += `<td id="${cellId}" onclick="cellClicked(this, ${i}, ${j})" class="${cellClass}">`
+            strHTML += `<td id="${cellId}" class="${cellClass}" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j})"">`
             strHTML += currCell + '</td>'
         }
         strHTML += '</tr>\n'
@@ -103,13 +111,10 @@ function renderBoard(board) {
     var elBoard = document.querySelector('.board')
     elBoard.innerHTML = strHTML
 
-
 }
-
 
 //Called when a cell (td) is clicked
 function cellClicked(elCell, i, j) {
-
     var elCell = document.querySelector(`.cell-${i}-${j}`)
 
     // // update the model
@@ -127,7 +132,18 @@ function cellClicked(elCell, i, j) {
     }
 
 
-    setTimer()
+    //setTimer()
+}
+
+
+// function whichButton(event) {
+//     alert("You pressed button: " + event.button)
+// }
+
+function cellMarked(elCell, i, j) {
+    window.event.preventDefault()
+    console.log('right', i, j);
+    elCell.classList.toggle('cell-marked')
 }
 
 
@@ -164,3 +180,6 @@ function stopTimer() {
     clearInterval(gTimeInterval)
     gTimeInterval = 0
 }
+
+
+
