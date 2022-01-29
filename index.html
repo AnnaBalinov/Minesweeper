@@ -10,17 +10,24 @@
 
 <body onload="initGame()">
 
-    <h1 class="msg">Minesweeper 😊</h1>
-    <div class="game-data-zone">
+    <h1 class="msg">Minesweeper😊</h1>
+    <div class="data">
         <ul>
             <li>Timer:<span class="timer">0</span></li>
             <li>Score:<span class="score">0</span></li>
             <li> Lives:<span class="lives">❤️❤️❤️</span></li>
+            <li> Music:<button class="music" onclick="musicPlayPause(this)">▶️</button>
+                <!-- <audio autoplay loop>
+                    <source src="music/background music.mp3" type="audio"/>
+                </audio> -->
+                <iframe src="music/background music.mp3" allow="autoplay" style="display:none" id="iframeAudio">
+                </iframe> 
+            </li>
         </ul>
     </div>
 
 
-    <div class="play-zone">
+    <div class="zone">
         <table>
             <tbody class="board">
             </tbody>
@@ -28,9 +35,9 @@
     </div>
 
     <div class="levels">
-        <button onclick="resetGame(4, 2, 3)">Beginners</button>
-        <button onclick="resetGame(8, 12, 3)">advanced</button>
-        <button onclick="resetGame(12, 30, 3)">Experts</button>
+        <button class="btn-levels" onclick="resetGame(4, 2, 3)">Beginners</button>
+        <button class="btn-levels" onclick="resetGame(8, 12, 3)">advanced</button>
+        <button class="btn-levels" onclick="resetGame(12, 30, 3)">Experts</button>
     </div>
 
 

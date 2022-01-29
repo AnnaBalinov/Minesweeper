@@ -14,8 +14,6 @@ function randomCellLocation(board) {
 }
 
 function renderScore(count) {
-    // if (!gGame.isOn) return
-    
     var score = document.querySelector('.score')
     score.innerHTML = count
 }

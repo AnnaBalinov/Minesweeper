@@ -9,8 +9,14 @@ const LIFE = '❤️'
 const DEAD = '☠️'
 
 const FLOOR = ' '
-const COVER = `<img class="cover" src="img/cover.png">`
-const FLAG = `<img class="flag" src="img/flag.png">`
+const COVER = '<img class="cover" src="img/cover.png">'
+const FLAG = '<img class="flag" src="img/flag.png">'
+
+const PLAY_MUSIC = '▶️'
+const PAUSE_MUSIC = '⏸️'
+
+const CLICK_SOUND = '<audio src="music/click.mp3"></audio>'
+
 
 var gGame = {
     score: 0,
@@ -43,7 +49,7 @@ function initGame() {
     console.log(gLevel)
     console.table(gBoard)
     console.log('gVictoryScore', gVictoryScore)
-    
+
 }
 
 
@@ -66,7 +72,7 @@ function resetGame(size, mines, lives) {
 
     gBoard = []
     gMinesLocation = []
-    
+
     updateLives(gLevel.LIVES)
     renderScore(0)
     stopTimer()
@@ -168,7 +174,7 @@ function cellClicked(elCell, i, j) {
     if (gBoard[i][j].isMine) {
         elCell.innerText = MINE
         gLossesCount++
-        var diff = gLevel.LIVES - gLossesCount          ///// *** Lives *** ///////
+        var diff = gLevel.LIVES - gLossesCount ////Lives
         updateLives(diff)
 
         console.log('gLossesCount', gLossesCount)
@@ -240,8 +246,6 @@ function cellMarked(elCell, i, j) {
 }
 
 
-
-
 function gameOver() {
     gGame.isOn = false
     stopTimer()
@@ -293,5 +297,17 @@ function resetTime() {
     elTime.innerHTML = 0
 }
 
-
-
+//music
+var gAudioPlay = true
+function musicPlayPause(music) {
+    var audio = document.querySelector('iframe')
+    if (gAudioPlay) {
+        audio.src = "none"
+        music.innerHTML = PLAY_MUSIC
+        gAudioPlay = false
+    } else {
+        audio.src = "music/background music.mp3"
+        music.innerHTML = PAUSE_MUSIC
+        gAudioPlay = true
+    }
+}

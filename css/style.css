@@ -4,7 +4,7 @@
 
 body {
   text-align: center;
-  background-image: url(../img/japan1.jpg);
+  background-image: url(../img/background.jpg);
   background-size: cover;
 }
 
@@ -24,12 +24,18 @@ li {
   font-weight: 600;
 }
 
+.music {
+  background-color: Transparent;
+  cursor: pointer;
+  border: transparent;
+}
+
 span {
   color: rgb(255, 157, 230);
   padding: 10px;
 }
 
-.play-zone {
+.zone {
   height: 400px;
   margin: auto;
 }
@@ -68,7 +74,7 @@ table tr td:hover {
   height: 50px;
 }
 
-button {
+.btn-levels {
   margin: 8px;
   font-size: 20spx;
   font-weight: 600;
@@ -81,7 +87,7 @@ button {
   transition: all 0.6s ease-in-out;
 }
 
-button:hover {
+.btn-levels:hover {
   background-color: rgb(255, 157, 230);
   transform: scaleX(1.1) scaleY(1.1);
   transition: transform 0.3s, opacity 0.3s;
