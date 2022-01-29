@@ -1,21 +1,32 @@
+* {
+  font-family: "Courier New", Courier, monospace;
+}
+
 body {
   text-align: center;
   background-image: url(../img/japan1.jpg);
-  background-repeat: no-repeat;
-  background-size: auto;
+  background-size: cover;
 }
 
 h1 {
-  /* background-color: rgb(255, 157, 230); */
   color: rgb(255, 255, 255);
 }
 
-h3 {
+ul {
   color: rgb(255, 255, 255);
+  list-style-type: none;
+  overflow: hidden;
+}
+
+li {
+  display: inline;
+  font-size: 20spx;
+  font-weight: 600;
 }
 
 span {
   color: rgb(255, 157, 230);
+  padding: 10px;
 }
 
 .play-zone {
@@ -25,10 +36,9 @@ span {
 
 table {
   margin: auto;
-
-  -webkit-box-shadow: 0px 0px 80px 32px rgba(181,181,181,1);
-  -moz-box-shadow: 0px 0px 80px 32px rgba(181,181,181,1);
-  box-shadow: 0px 0px 80px 32px rgba(181,181,181,1);
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  border: 1px solid rgb(255, 157, 230);
 }
 
 table tr {
@@ -36,14 +46,14 @@ table tr {
   width: 30px;
 }
 table tr td {
-  border: 1px solid rgb(59, 59, 59);
+  border: 1px solid rgb(255, 157, 230);
   text-align: center;
   height: 25px;
   width: 25px;
 }
 
 table tr td:hover {
-  background-color: rgb(255, 157, 230);
+  background-color: rgb(250, 119, 217);
   cursor: pointer;
 }
 
@@ -54,17 +64,14 @@ table tr td:hover {
   width: 100%;
 }
 
-.timer {
-  padding: 10px;
-}
-
 .levels {
   height: 50px;
 }
 
 button {
   margin: 8px;
-  font-size: 15spx;
+  font-size: 20spx;
+  font-weight: 600;
   text-align: center;
   border-radius: 5px;
   height: 1cm;

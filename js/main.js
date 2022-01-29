@@ -1,6 +1,13 @@
 'use strict';
 
+const START = '😊'
+const LOSER = '🤯'
+const WINNER = '😎'
+
 const MINE = '🌸'
+const LIFE = '❤️'
+const DEAD = '☠️'
+
 const FLOOR = ' '
 const COVER = `<img class="cover" src="img/cover.png">`
 const FLAG = `<img class="flag" src="img/flag.png">`
@@ -12,30 +19,63 @@ var gGame = {
 
 var gLevel = {
     SIZE: 4,
-    MINES: 2
+    MINES: 2,
+    LIVES: 3
 }
 
-var gExposedCellsCount = 0
+var gTime = 0
+var gFirstClick = 0
+var gLossesCount = 0
+var gTimeInterval = 0
 var gVictoryScore = 0
+var gExposedCellsCount = 0
+
 var gBoard = []
 var gMinesLocation = []
-var gTime = 0
-var gTimeInterval = 0
-var gFirstClick = 0
 
-function initGame(size = 4, mines = 2) {
-    gLevel.SIZE = size
-    gLevel.MINES = mines
-    gVictoryScore = (size * size) - mines
-    // console.log(gVictoryScore)
-    gBoard = buildBoard(size, mines)
+
+function initGame() {
+    gVictoryScore = (gLevel.SIZE * gLevel.SIZE) - gLevel.MINES
+
+    gBoard = buildBoard(gLevel.SIZE)
     renderBoard(gBoard)
-    // console.table(gBoard)
+
+    console.log(gLevel)
+    console.table(gBoard)
+    console.log('gVictoryScore', gVictoryScore)
+    
 }
 
 
+function resetGame(size, mines, lives) {
 
-function buildBoard(size, mines) {
+    var elMsg = document.querySelector('.msg')
+    elMsg.innerHTML = 'Minesweeper ' + START
+
+    gLevel.SIZE = size
+    gLevel.MINES = mines
+    gLevel.LIVES = lives
+
+    gGame.score = 0
+    gGame.isOn = false
+
+    gTime = 0
+    gFirstClick = 0
+    gLossesCount = 0
+    gExposedCellsCount = 0
+
+    gBoard = []
+    gMinesLocation = []
+    
+    updateLives(gLevel.LIVES)
+    renderScore(0)
+    stopTimer()
+    resetTime()
+    initGame()
+}
+
+
+function buildBoard(size) {
     var board = []
     for (var i = 0; i < size; i++) {
         board.push([])
@@ -49,14 +89,18 @@ function buildBoard(size, mines) {
             board[i][j] = cell
         }
     }
-    //set mines
+    return board
+}
+
+
+function setMines(board, mines) {
     for (var i = 0; i < mines; i++) {
         var location = randomCellLocation(board)
         board[location.i][location.j].isMine = true
         gMinesLocation.push(location)
-        // console.log('mines location', location)
+        console.log('mines location', location)
     }
-    return board
+    return
 }
 
 
@@ -73,6 +117,16 @@ function setMinesNebsCount(board, rowIdx, colIdx) {
     }
     return count
 }
+
+function updateLives(num) {
+    var lives = document.querySelector('.lives')
+    if (num !== 0) {
+        lives.innerHTML = LIFE.repeat(num)
+    } else {
+        lives.innerHTML = DEAD
+    }
+}
+
 
 
 function renderBoard(board) {
@@ -93,7 +147,6 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
 }
 
-
 function cellClicked(elCell, i, j) {
 
     var elCell = document.querySelector(`.cell-${i}-${j}`)
@@ -102,34 +155,46 @@ function cellClicked(elCell, i, j) {
     if (gFirstClick === 1) {
         gGame.isOn = true
         setTimer()
+        setMines(gBoard, gLevel.MINES)
     }
 
     if (gBoard[i][j].isMarked || gBoard[i][j].isShown || !gGame.isOn) return
 
-    // // update the model
+    //// update the model
     gBoard[i][j].isShown = true
     gBoard[i][j].minesAroundCount = setMinesNebsCount(gBoard, i, j)
 
-    // // update the dom
+    //// update the dom
+    if (gBoard[i][j].isMine) {
+        elCell.innerText = MINE
+        gLossesCount++
+        var diff = gLevel.LIVES - gLossesCount          ///// *** Lives *** ///////
+        updateLives(diff)
+
+        console.log('gLossesCount', gLossesCount)
+        console.log('gLevel.LIVES', gLevel.LIVES)
+        console.log('diff', diff)
+
+        if (diff !== 0) {
+            return
+        } else {
+            console.log('game over')
+            gameOver()
+            loss()
+            return
+        }
+    }
+
     if (gBoard[i][j].minesAroundCount !== 0) {
         elCell.innerHTML = gBoard[i][j].minesAroundCount
         gExposedCellsCount++
         renderScore(gExposedCellsCount)
-
-    } else if (gBoard[i][j].isMine) {
-        elCell.innerText = MINE
-        console.log('game over')        //LOSE: when clicking a mine
-        gameOver()
-        loos()
-
     } else {
-
         elCell.innerText = FLOOR
         ///exp
         gExposedCellsCount++
         renderScore(gExposedCellsCount)
         expandShown(gBoard, i, j)
-
     }
 
     if (gExposedCellsCount >= gVictoryScore) {
@@ -145,25 +210,9 @@ function expandShown(board, rowIdx, colIdx) {
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j > board.length - 1) continue
             if (i === rowIdx && j === colIdx) continue
+
             var currCell = board[i][j]
-            if (currCell.isMine || currCell.isMarked || currCell.isShown) {
-                break
-            } else {
-                var elNebCell = document.querySelector(`.cell-${i}-${j}`)
-
-                board[i][j].isShown = true
-                board[i][j].minesAroundCount = setMinesNebsCount(gBoard, i, j)
-
-                if (currCell.minesAroundCount !== 0) {
-                    elNebCell.innerText = currCell.minesAroundCount
-                    gExposedCellsCount++
-                    renderScore(gExposedCellsCount)
-                } else {
-                    elNebCell.innerText = FLOOR
-                    gExposedCellsCount++
-                    renderScore(gExposedCellsCount)
-                }
-            }
+            cellClicked(currCell, i, j)
         }
     }
 }
@@ -190,10 +239,12 @@ function cellMarked(elCell, i, j) {
 
 }
 
+
+
+
 function gameOver() {
     gGame.isOn = false
     stopTimer()
-    renderScore(0)
     ///all mines should be revealed
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
@@ -207,13 +258,13 @@ function gameOver() {
 
 function victory() {
     var elMsg = document.querySelector('.msg')
-    elMsg.innerHTML = 'victory! 😎'
+    elMsg.innerHTML = 'victory! ' + WINNER
 }
 
-function loos() {
+function loss() {
     var elMsg = document.querySelector('.msg')
-    elMsg.innerHTML = 'Loos... 🤯'
-    
+    elMsg.innerHTML = 'Loss... ' + LOSER
+
 }
 
 
@@ -235,6 +286,11 @@ function renderTime() {
 function stopTimer() {
     clearInterval(gTimeInterval)
     gTimeInterval = 0
+}
+
+function resetTime() {
+    var elTime = document.querySelector('.timer')
+    elTime.innerHTML = 0
 }
 
 
